@@ -14,7 +14,7 @@ public record ProductResponse(
         Integer stock,
         ProductStatus status,
         CategoryResponse category,
-        List<String> imageUrls,
+        List<ProductImageResponse> images,
         Instant createdAt,
         Instant updatedAt
 ) {

@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Component;
 
 import com.malick.shoestore.dtos.CreateProductRequest;
+import com.malick.shoestore.dtos.ProductImageResponse;
 import com.malick.shoestore.dtos.ProductResponse;
 import com.malick.shoestore.entities.Category;
 import com.malick.shoestore.entities.Product;
@@ -43,7 +44,7 @@ public class ProductMapper {
                 product.getStock(),
                 product.getStatus(),
                 categoryMapper.toResponse(product.getCategory()),
-                product.getImages().stream().map(ProductImage::getImageUrl).toList(),
+                product.getImages().stream().map(this::toImageResponse).toList(),
                 product.getCreatedAt(),
                 product.getUpdatedAt()
         );
@@ -56,5 +57,13 @@ public class ProductMapper {
                 .filter(imageUrl -> !imageUrl.isBlank())
                 .map(imageUrl -> ProductImage.builder().imageUrl(imageUrl).build())
                 .toList();
+    }
+
+    private ProductImageResponse toImageResponse(ProductImage productImage) {
+        return new ProductImageResponse(
+                productImage.getId(),
+                productImage.getImageUrl(),
+                productImage.getPublicId()
+        );
     }
 }

@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
 import com.malick.shoestore.exceptions.CategoryNotFoundException;
+import com.malick.shoestore.exceptions.ImageUploadException;
+import com.malick.shoestore.exceptions.ProductImageNotFoundException;
 import com.malick.shoestore.exceptions.ProductNotFoundException;
 
 @RestControllerAdvice
@@ -38,10 +40,27 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler({CategoryNotFoundException.class, ProductNotFoundException.class})
+    @ExceptionHandler({
+            CategoryNotFoundException.class,
+            ProductNotFoundException.class,
+            ProductImageNotFoundException.class
+    })
     public ResponseEntity<ApiErrorResponse> handleNotFoundException(RuntimeException exception, WebRequest request) {
         return buildResponse(
                 HttpStatus.NOT_FOUND,
+                exception.getMessage(),
+                getPath(request),
+                Map.of()
+        );
+    }
+
+    @ExceptionHandler(ImageUploadException.class)
+    public ResponseEntity<ApiErrorResponse> handleImageUploadException(
+            ImageUploadException exception,
+            WebRequest request
+    ) {
+        return buildResponse(
+                HttpStatus.BAD_GATEWAY,
                 exception.getMessage(),
                 getPath(request),
                 Map.of()

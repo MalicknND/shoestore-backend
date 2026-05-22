@@ -31,6 +31,9 @@ public class ProductImage extends BaseEntity {
     @Column(nullable = false)
     private String imageUrl;
 
+    @Column
+    private String publicId;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
